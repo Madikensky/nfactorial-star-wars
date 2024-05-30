@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const fs = require('fs');
 
+// Уникальные айдишки, чтобы всегда создавать новых персонажей, планеты, космические корабли
+
 const planetIdPath = './IDs/planetID.txt';
 const personIdPath = './IDs/personID.txt';
 const starshipIdPath = './IDs/starshipID.txt';
@@ -31,7 +33,7 @@ function getID(objectPath) {
 
 let planetID = 0;
 let personID = 0;
-let starshipID = 8; // потому что кораблей с айдишкой <=8 мало
+let starshipID = 8; // потому что кораблей до id <=8 мало, например, в апишке нету людей с id 1, 2 итд
 
 async function startServer() {
   await client.connect();
@@ -43,6 +45,7 @@ async function startServer() {
   //   e.deleteMany({});
   // });
 
+  //
   try {
     app.get('/get_collections', async (req, res) => {
       try {
@@ -104,6 +107,14 @@ async function startServer() {
 
     app.use(bodyParser.json());
 
+    /*
+    Post request /get_collectionData
+    body: {
+      collection_name: planets || starships || people
+    }
+    возвращает данные одной из трех коллекций
+    */
+
     app.post('/get_collectionData', async (req, res) => {
       const requestBody = req.body;
       const collectionName = requestBody.collection_name;
@@ -112,7 +123,7 @@ async function startServer() {
           await database.collection(`${collectionName}`).find({}).toArray()
         );
       } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send('Some errors..');
       }
     });
 

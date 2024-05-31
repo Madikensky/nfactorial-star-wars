@@ -12,7 +12,22 @@ const starshipIdPath = './IDs/starshipID.txt';
 
 const app = express();
 
-const PORT = 3000;
+// выходила корс ошибка, чатгпт написал данный скрипт чтобы избежать этой ошибки
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type'
+  );
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
+
+const PORT = 5000;
 
 const uri =
   'mongodb+srv://madik:madik123@cluster-init.vpuhebk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-init';
@@ -56,16 +71,16 @@ async function startServer() {
       }
     });
 
-    app.get('/create_person', async (req, res) => {
+    app.get('/create_character', async (req, res) => {
       try {
-        personID++;
-        updateID(personID, personIdPath);
         personID = getID(personIdPath);
         const response = await axios.get(
           `https://swapi.dev/api/people/${personID}/`
         );
-        await database.collection(`people`).insertOne(response.data);
+        await database.collection(`characters`).insertOne(response.data);
         res.send(`Person ${personID} is created!`);
+        personID++;
+        updateID(personID, personIdPath);
       } catch (e) {
         res.send(e);
       }
@@ -73,14 +88,14 @@ async function startServer() {
 
     app.get('/create_planet', async (req, res) => {
       try {
-        planetID++;
-        updateID(planetID, planetIdPath);
         planetID = getID(planetIdPath);
         const response = await axios.get(
           `https://swapi.dev/api/planets/${planetID}/`
         );
         await database.collection(`planets`).insertOne(response.data);
         res.send(`Planet ${planetID} is created!`);
+        planetID++;
+        updateID(planetID, planetIdPath);
       } catch (e) {
         res.send(e);
       }
@@ -88,20 +103,20 @@ async function startServer() {
 
     app.get('/create_starship', async (req, res) => {
       try {
-        starshipID++;
-        updateID(starshipID, starshipIdPath);
         starshipID = getID(starshipIdPath);
         const response = await axios.get(
           `https://swapi.dev/api/starships/${starshipID}/`
         );
         await database.collection(`starships`).insertOne(response.data);
         res.send(`Starship ${starshipID} is created!`);
-      } catch (e) {
         starshipID++;
         updateID(starshipID, starshipIdPath);
+      } catch (e) {
         res.send(
           'The starship with this id doesnt exist. Send request again to try another id.'
         );
+        starshipID++;
+        updateID(starshipID, starshipIdPath);
       }
     });
 

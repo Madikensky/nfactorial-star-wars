@@ -1,10 +1,11 @@
 import React from 'react';
-import DataComponent from './DataComponent';
+
+import EntitySample from './EntitySample';
 
 function Characters() {
   return (
     <div className="App">
-      <DataComponent />
+      <EntitySample entityType={'characters'} />
     </div>
   );
 }

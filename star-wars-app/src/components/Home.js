@@ -8,8 +8,8 @@ function Home() {
       <div className="app-wrapper">
         <VideoComponent />
         <h1>
-          Welcome to the STAR WARS web app! Here you can create and find
-          planets, characters, and starships from all over the STAR Wars world!
+          Welcome to the STAR WARS web app! Here you can find planets,
+          characters, and starships from all over the STAR Wars world!
         </h1>
         <div className="entities-wrapper">
           <StarWarsEntity entityType="characters" />

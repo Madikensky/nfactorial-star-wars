@@ -1,4 +1,4 @@
-# Color Palette Explorer
+# Star Wars web app
 
 ## Описание проекта
 
